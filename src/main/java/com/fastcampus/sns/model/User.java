@@ -3,10 +3,13 @@ package com.fastcampus.sns.model;
 
 import com.fastcampus.sns.model.entity.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
+@Getter
 public class User {
 
     private Integer id;

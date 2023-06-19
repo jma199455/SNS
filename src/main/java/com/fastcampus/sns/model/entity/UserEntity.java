@@ -9,6 +9,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -24,22 +25,28 @@ public class UserEntity {
     private Integer id;
 
     @Column(name = "user_name")
+    //@Column
     private String userName;
 
     @Column(name = "password")
+    //@Column
     private String password;
 
     @Column(name = "role")
+    //@Column
     @Enumerated(EnumType.STRING)
     private UserRole role = UserRole.USER;
 
     @Column(name = "registered_at")
+    //@Column
     private Timestamp registerAt;
 
     @Column(name = "updated_at")
+    //@Column
     private Timestamp updatedAt;
 
     @Column(name = "deleted_at")
+    //@Column
     private Timestamp deletedAt;
 
     @PrePersist
@@ -51,6 +58,7 @@ public class UserEntity {
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
     }
+
 
     // deletedAt는 클래스 위에 @SQLDelete 어노테이션으로 설정
 
