@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 import java.util.WeakHashMap;
@@ -26,6 +27,10 @@ public class UserServiceTest {
     @MockBean
     private UserEntityRepository userEntityRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder encoder;
+
+
     @Test
     void 회원가입이_정상적으로_동작하는_경우() {
 
@@ -35,6 +40,7 @@ public class UserServiceTest {
         // mocking
         //when(userEntityRepository.findByUserName(userName)).the
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
+        when(encoder.encode(password)).thenReturn("encrypt_password ");
         when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName,password))); // 저장된 Entity 반환
 
         Assertions.assertDoesNotThrow(() -> userService.join(userName, password)); // exception이 발생하지 않도록
@@ -51,6 +57,7 @@ public class UserServiceTest {
 
         // mocking
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
+        when(encoder.encode(password)).thenReturn("encrypt_password ");
         when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture)); // 저장된 Entity 반환  , mocking된 user enttiy를 가지고 비교하도록 구현해도됨
 
         SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> userService.join(userName, password)); // exception이 발생하지 않도록

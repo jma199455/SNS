@@ -5,7 +5,7 @@ spring:
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update # ??? update create(drop??? ?? ??)
     properties:
       hibernate.format_sql: true # sql ??? ??? ??
   datasource:
@@ -14,3 +14,10 @@ spring:
     password: 123456
     driver-class-name: org.mariadb.jdbc.Driver
 
+
+
+
+jwt:
+    secret-key: fast_campus.sns-application-2002.secret_key
+    #30 days
+    token.expired-time-ms: 2592000000
