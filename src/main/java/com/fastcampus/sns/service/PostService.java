@@ -49,5 +49,26 @@ public class PostService {
 
     }
 
+    @Transactional
+    public void delete(String userName, Integer postId) {
+        // UserEntity에서 user 가져오는 부분
+        UserEntity userEntity =  userEntityRepository.findByUserName(userName).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.USER_NOT_FOUND ,String.format("%s not founded", userName)));
+
+        // 포스트가 존재하는지
+        PostEntity postEntity = postEntityRepository.findById(postId).orElseThrow(() ->
+                new SnsApplicationException(ErrorCode.POST_NOT_FOUND, String.format("%s not founded", postId)));
+
+        // post permission
+        if (postEntity.getUser() != userEntity) {
+            throw new SnsApplicationException(ErrorCode.INVALID_PERMISSION, String.format("%s has no permission with %s", userName, postId));
+        }
+
+        postEntityRepository.delete(postEntity);
+
+
+
+    }
+
 
 }
