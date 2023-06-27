@@ -6,12 +6,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PostCreateRequest {
+public class PostModifyRequest {
 
     private String title;
     private String body;
 
-    public PostCreateRequest() {
+    public PostModifyRequest() {
 
     }
 
