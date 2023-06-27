@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class User implements UserDetails {
                 entity.getUserName(),
                 entity.getPassword(),
                 entity.getRole(),
-                entity.getRegisterAt(),
+                entity.getRegisteredAt(),
                 entity.getUpdatedAt(),
                 entity.getDeletedAt()
         );

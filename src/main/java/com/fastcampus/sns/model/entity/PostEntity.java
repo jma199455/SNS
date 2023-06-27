@@ -1,7 +1,6 @@
 package com.fastcampus.sns.model.entity;
 
 
-import com.fastcampus.sns.model.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -22,7 +21,7 @@ public class PostEntity {
 
 
     @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)         // 시퀀스사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY)         // 시퀀스사용
     private Integer id;
 
     @Column(name = "title")
@@ -36,7 +35,7 @@ public class PostEntity {
     private UserEntity user;
 
     @Column(name = "registered_at")
-    private Timestamp registerAt;
+    private Timestamp registeredAt;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
@@ -46,7 +45,7 @@ public class PostEntity {
 
     @PrePersist
     void registeredAt() {
-        this.registerAt = Timestamp.from(Instant.now());
+        this.registeredAt = Timestamp.from(Instant.now());
     }
 
     @PreUpdate

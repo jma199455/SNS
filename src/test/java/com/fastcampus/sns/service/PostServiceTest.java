@@ -70,12 +70,13 @@ public class PostServiceTest {
         String userName = "userName";
         Integer postId = 1;
 
-        PostEntity postEntity = PostEntityFixture.get(userName, postId);
+        PostEntity postEntity = PostEntityFixture.get(userName, postId,1);
         UserEntity userEntity = postEntity.getUser();
         // mocking
 
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(userEntity));
         when(postEntityRepository.findById(postId)).thenReturn(Optional.of(postEntity));
+        when(postEntityRepository.saveAndFlush(any())).thenReturn(postEntity);
 
         Assertions.assertDoesNotThrow(() -> PostService.modify(title, body, userName, postId)); // exception 던지며지 않도록
 
@@ -88,7 +89,7 @@ public class PostServiceTest {
         String userName = "userName";
         Integer postId = 1;
 
-        PostEntity postEntity = PostEntityFixture.get(userName, postId);
+        PostEntity postEntity = PostEntityFixture.get(userName, postId,1);
         UserEntity userEntity = postEntity.getUser();
         // mocking
 
@@ -106,8 +107,8 @@ public class PostServiceTest {
         String userName = "userName";
         Integer postId = 1;
 
-        PostEntity postEntity = PostEntityFixture.get(userName, postId);
-        UserEntity writer = UserEntityFixture.get("userName1", "password");
+        PostEntity postEntity = PostEntityFixture.get(userName, postId,1);
+        UserEntity writer = UserEntityFixture.get("userName1", "password",2);
 
 
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(writer));

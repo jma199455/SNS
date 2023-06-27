@@ -9,7 +9,6 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 
 @Getter
@@ -39,7 +38,7 @@ public class UserEntity {
 
     @Column(name = "registered_at")
     //@Column
-    private Timestamp registerAt;
+    private Timestamp registeredAt;
 
     @Column(name = "updated_at")
     //@Column
@@ -51,7 +50,7 @@ public class UserEntity {
 
     @PrePersist
     void registeredAt() {
-        this.registerAt = Timestamp.from(Instant.now());
+        this.registeredAt = Timestamp.from(Instant.now());
     }
 
     @PreUpdate
