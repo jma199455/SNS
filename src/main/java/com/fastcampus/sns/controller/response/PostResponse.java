@@ -24,6 +24,8 @@ public class PostResponse {
 
     private Timestamp deletedAt;
 
+
+    // PostResponse 객체로 리턴해주기 위해 (Post dto 를)
     public static PostResponse fromPost(Post post) {
         return new PostResponse(
                 post.getId(),

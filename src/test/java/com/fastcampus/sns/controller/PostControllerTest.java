@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -71,7 +72,7 @@ public class PostControllerTest {
     }
 
     @Test
-    @WithMockUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
+    @WithMockUser
     void 포스트수정() throws Exception{
         String title = "title";
         String body = "body";
@@ -86,23 +87,6 @@ public class PostControllerTest {
                 .andExpect(status().isOk());
     }
 
-    /*
-    @Test
-    @WithMockUser
-    void 포스트수정() throws Exception {
-        String title = "title";
-        String body = "body";
-
-        when(postService.modify(eq(title), eq(body), any(), eq(1))).
-                thenReturn(Post.fromEntity(PostEntityFixture.get("userName", 1, 1)));
-
-        mockMvc.perform(put("/api/v1/posts/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
-                ).andDo(print())
-                .andExpect(status().isOk());
-    }
-    */
 
     @Test
     @WithAnonymousUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
@@ -133,23 +117,6 @@ public class PostControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    /*
-    @Test
-    @WithMockUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
-    void 포스트수정시_본인이_작성한_글이_아니라면_에러발생() throws Exception{
-        String title = "title";
-        String body = "body";
-
-        // mocking
-        Mockito.doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).modify(eq(title),eq(body),any(), eq(1));
-
-        mockMvc.perform(put("/api/v1/posts/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
-                ).andDo(print())
-                .andExpect(status().isNotFound());
-    }
-    */
 
     @Test
     @WithMockUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
@@ -170,7 +137,7 @@ public class PostControllerTest {
 
 
     @Test
-    @WithMockUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
+    @WithMockUser
     void 포스트삭제() throws Exception{
 
         mockMvc.perform(delete("/api/v1/posts/1")
@@ -190,7 +157,7 @@ public class PostControllerTest {
     }
 
     @Test
-    @WithMockUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
+    @WithMockUser
     void 포스트시_작성자와_삭제요청자가_다를경우() throws Exception{
 
         // mocking
@@ -212,6 +179,56 @@ public class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    @WithMockUser // 인증된 유저로 작성
+    void 피드목록() throws Exception{
+        // TODO : mocking
+        when(postService.list(any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/api/v1/posts/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithAnonymousUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
+    void 피드목록요청시_로그인하지_않은경우() throws Exception{
+        // TODO : mocking
+        when(postService.list(any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/api/v1/posts/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+
+    @Test
+    @WithMockUser // 인증된 유저로 작성
+    void 내피드목록() throws Exception{
+        // TODO : mocking
+        when(postService.my(any(),any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/api/v1/posts/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithAnonymousUser // 어노테이션을 사용해서 로그인하지 않은 경우를 표현함
+    void 내피드목록요청시_로그인하지_않은경우() throws Exception{
+        // TODO : mocking
+        when(postService.my(any(),any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/api/v1/posts/my")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());
     }
 
 
