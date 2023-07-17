@@ -16,7 +16,7 @@ public class PostResponse {
 
     private String body;
 
-    private  UserResponse userResponse;
+    private  UserResponse user;
 
     private Timestamp registeredAt;
 
