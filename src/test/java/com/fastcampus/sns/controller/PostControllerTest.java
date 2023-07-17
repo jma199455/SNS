@@ -181,14 +181,12 @@ public class PostControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-
     @Test
-    @WithMockUser // 인증된 유저로 작성
-    void 피드목록() throws Exception{
-        // TODO : mocking
+    @WithMockUser
+    void 피드목록() throws Exception {
         when(postService.list(any())).thenReturn(Page.empty());
 
-        mockMvc.perform(get("/api/v1/posts/my")
+        mockMvc.perform(get("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().isOk());
