@@ -1,6 +1,7 @@
 package com.fastcampus.sns.model.entity;
 
 
+import com.fastcampus.sns.model.Post;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -11,29 +12,24 @@ import java.sql.Timestamp;
 import java.time.Instant;
 
 @Entity
-// 인덱스 걸기
-@Table(name = "post")
+@Table(name = "likes")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE post SET deleted_at = NOW() where id = ?")
+@SQLDelete(sql = "UPDATE likes SET deleted_at = NOW() where id = ?")
 @Where(clause="deleted_at is Null")
-public class PostEntity {
-
-
+public class LikeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)         // 시퀀스사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "body", columnDefinition = "TEXT")        // TEXT타입으로 컬럼생성
-    private String body;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name= "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "post_id")
+    private PostEntity post;
 
     @Column(name = "registered_at")
     private Timestamp registeredAt;
@@ -54,14 +50,10 @@ public class PostEntity {
         this.updatedAt = Timestamp.from(Instant.now());
     }
 
-    // PostEntity 만들어주기
-    public static PostEntity of(String title, String body, UserEntity userEntity){
-        PostEntity entity = new PostEntity();
-        entity.setTitle(title);
-        entity.setBody(body);
+    public static LikeEntity of(UserEntity userEntity, PostEntity postEntity) {
+        LikeEntity entity = new LikeEntity();
         entity.setUser(userEntity);
+        entity.setPost(postEntity);
         return entity;
     }
-
-
 }
